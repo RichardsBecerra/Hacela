@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='static/style.css')}}"></link>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    
+    <title>Tomalo</title>
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark ">
+        <nav class="navbar justify-content-start">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">
+                <img src="{{ url_for('static', filename='img/hacelalogo.png')}}" alt="" width="60" height="50" class="d-inline-block align-text-center">
+                Hacela 
+                </a>
+            </div>
+            </nav>
+    
+        <div>
+                <h1 class="col justify-content-center" style="color: orange;">Vamos {{session.nombre}} !</h1>
+        </div>
+            
+            <ul class='navbar justify-content-end'>
+    
+                <li class="nav-link"><div>
+                    <a href="/dashboard">dashboard</a>
+                </div>
+    
+                <li class="nav-link"><div>
+                    <a href="/tucuenta/{{session.user_id}}">Cuenta</a>
+                </div></li>
+    
+                <li class="nav-link"><div>
+                    <form action="/logout" method="POST">
+                        <input type="submit" type='button' class="btn btn-outline-primary" value="logout">
+                    </form>
+                </div></li>
+    
+            </ul>
+    </nav>
+
+    <h2>Prepararse</h2>
+    <h3>Listo/a</h3>
+    <h2>A correr por lo tuyo !</h2>
+    <p>{{conteo}}</p>
+    
+
+    <button id="empiezaya">Empieza ahora!</button>
+    
+    <!--<form action="/location" method="POST">
+        <input type="submit" type='button' class="btn btn-outline-primary" id="empiezaya" value="Empieza Ahora !">
+    </form>-->
+    <a href="/finalizado">Detener carrera</a>
+    
+
+    <!--SCRIPT PARA OBTENCION DE COORDENADAS-->
+    
+    <div id="map" class="map"></div>
+    <ul id="timestamps"></ul>
+    <script>
+        const empieza_ya = document.getElementById('empiezaya')
+        empieza_ya.addEventListener('click', function(){
+            alert('El boton esta funcionando')
+            if (navigator.geolocation) {
+            const timestampList = document.getElementById('timestamps')
+            var t = setInterval(function(){
+                navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const pos = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                    };
+                    const time = Date.now();
+                    console.log(pos)
+                    console.log(time)
+                    postData('/location', pos)
+                    .then(data => {
+                        //const temp_item = document.createElement('li')
+                        //temp_item.textContent = `lat: ${pos.lat} - long: ${pos.lng}`
+                        //timestampList.appendChild(temp_item)
+                        //console.log(data); // JSON data parsed by `data.json()` call
+                    });
+                })},3000) //estos son los segundos de intervalo en los que me envia la ubicacion, en este caso es cada 3 segundos.
+        } else {
+            // Browser doesn't support Geolocation
+            console.log('no work')
+            // handleLocationError(false, infoWindow, map.getCenter());
+        }
+        })
+        
+        async function postData(url = '', data = {}) {
+        // Default options are marked with *
+        const response = await fetch(url, {
+            method: 'POST', // *GET, POST, PUT, DELETE, etc.
+            mode: 'cors', // no-cors, *cors, same-origin
+            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: 'same-origin', // include, *same-origin, omit
+            headers: {
+            'Content-Type': 'application/json'
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            redirect: 'follow', // manual, *follow, error
+            referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+            body: JSON.stringify(data) // body data type must match "Content-Type" header
+        });
+        return response.json(); // parses JSON response into native JavaScript objects
+        }
+    </script>
+</body>
+</html>

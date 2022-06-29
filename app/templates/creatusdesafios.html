@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='static/style.css')}}"></link>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <title>Crea tus deafios</title>
+</head>
+
+    <nav class="navbar navbar-dark bg-dark ">
+        <nav class="navbar justify-content-start">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">
+                <img src="static\img\hacelalogo.png" alt="" width="60" height="50" class="d-inline-block align-text-center">
+                Hacela 
+                </a>
+            </div>
+            </nav>
+
+        <ul class='navbar justify-content-end'>
+
+            <li class="nav-link">
+                <form action="/logout" method="POST">
+                    <input type="submit" type='button' class="btn btn-warning" value="logout">
+                </form>
+            </li>
+        </ul>
+    </nav>
+
+
+    <div>
+    <h1 class="row justify-content-center">Crea el desafio que hará sudar a tu comunidad</h1>
+    </div>
+
+<body>
+    <div class="container">
+        
+        <div class="row">
+
+            <div class="col-5">
+                <div>
+                    <img src="static\img\seccionempresa.png" width="700" height="400" class="rounded float-start" alt="...">
+                </div>
+            </div>
+
+            <div class="col-2">
+
+            </div>
+
+            <div class="col-5">
+
+                <form action="/creatusdesafios" method="POST">
+                    <div>
+                        <label for="nombre" class="col-sm-10 col-form-label">
+                            Nombre : <input type="text" name="nombre" class="form-control">
+                        </label>
+                    </div>
+                    <div>
+                        <label for="descuento" class="col-sm-10 col-form-label">
+                            Descuento (%): <input type="text" name="descuento" class="form-control">
+                        </label>
+                    </div>
+                    <div>
+                        <label for="condiciones" class="col-sm-10 col-form-label">
+                            Condiciones: <textarea name="condiciones" cols="44" rows="3"></textarea>
+                        </label>
+                    </div>
+                    <div>
+                        <label for="creado" class="col-sm-10 col-form-label">
+                            Creado: <input type="date" name="creado" class="form-control">
+                        </label>
+                    </div>
+                    <div>
+                        <label for="finaliza" class="col-sm-10 col-form-label">
+                            Finaliza: <input type="date" name="finaliza" class="form-control">
+                        </label>
+                    </div>
+                    <div>
+                    <input type="submit" name="creardesafio" class="btn btn-success" value="Crear desafio">
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    <!--Los desafios creados por esta empresa-->
+    <h2>Todos tus desafios</h2>
+    <section>
+        <table class="table table-hover table-striped" width="50">
+            <thead>
+                <tr>
+                    <th>Nombre de tu desafio</th>
+                    <th>Descuento</th>
+                    <th>Condiciones</th>
+                    <th>Creado</th>
+                    <th>Finaliza</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                {% for desafios in desafios %}
+                    <td>
+                        {{desafios.nombre}}
+                    </td>
+                    <td>
+                        <p>con un {{desafios.descuento}}% de descuento,</p>
+                    </td>
+                    <td>
+                        <p>lo que debes saber para conseguir este codigo: {{desafios.condiciones}}</p>
+                    </td>
+                    <td>
+                        <p>Disponible desde {{desafios.creado}}</p>
+                    </td>
+                    <td>
+                        <p>Hasta {{desafios.finaliza}}.-</p>
+                    </td>
+                {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+        
+    </section>
+</body>
+</html>
