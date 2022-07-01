@@ -1,4 +1,3 @@
-from winreg import QueryInfoKey
 from app.config.mysqlconnection import connectToMySQL
 from flask import Flask, render_template,request,redirect,session, flash
 
